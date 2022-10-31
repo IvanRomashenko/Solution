@@ -5,9 +5,9 @@ public class Calculator {
         Calculation calculator = new Calculation();
         System.out.println("Ввести выражение целых чисел через пробел" + "\n" +
                 "(римские цифры вводятся с большой буквы от одного до десяти," +
-                " результат их выражения не должен быть отрицательным и не должен быть больше десяти):");
-        Scanner myObj = new Scanner(System.in);
-        String input = myObj.nextLine();
+                " результат их выражения не должен быть отрицательным или равным нулю):");
+        Scanner scan = new Scanner(System.in);
+        String input = scan.nextLine();
         System.out.println(calculator.calc(input));
     }
 }
@@ -15,6 +15,9 @@ public class Calculator {
 class Calculation {
     public String calc(String input) throws Exception {
         String[] splitStr = input.split(" ");
+        if (splitStr.length > 3) {
+            throw new Exception("Введено более двух операндов");
+        }
         boolean rome = false;
         int num1;
         int num2;
@@ -30,20 +33,21 @@ class Calculation {
         if (count == 1) {
             throw new Exception("Используются одновременно разные системы счисления");
         }
+        if (count == 3) {
+            throw new Exception("Введено более двух операндов");
+        }
         num1 = getNumber(splitStr[0]);
         num2 = getNumber(splitStr[2]);
+        if (num1 < 1 || num1 > 10 || num2 < 1 || num2 > 10) {
+            throw new Exception("Введены числа меньше 1 или больше 10");
+        }
         int result = getResult(num1, num2, splitStr[1]);
         String output;
         if (rome) {
-            if (result > 10 || result < 0) {
-                throw new Exception("Результат римского выражениея должет быть о 1 до 10" +
-                        "(не должен быть отрицательным)");
-            } else output = getRomeNumber(result);
-        } else {
             if (result <= 0) {
-                throw new Exception("не должен быть отрицательным");
-            } else output = String.valueOf(result);
-        }
+                throw new Exception("Результат римского выражениея не должет быть отрицательным или равным нулю");
+            } else output = getRomeNumber(result);
+        } else output = String.valueOf(result);
         return output;
     }
 
@@ -62,8 +66,8 @@ class Calculation {
                 case "VII" -> 7;
                 case "VIII" -> 8;
                 case "IX" -> 9;
-                case "x" -> 10;
-                default -> throw new Exception("Неверное римской число или результат больше 10");
+                case "X" -> 10;
+                default -> throw new Exception("Введено римское число больше 10");
             };
         }
         return number;
@@ -81,17 +85,27 @@ class Calculation {
             case 8 -> "VIII";
             case 9 -> "IX";
             case 10 -> "X";
-            default -> throw new Exception("Результат больше десяти");
+            case 11 -> "XI";
+            case 12 -> "XII";
+            case 13 -> "XIII";
+            case 14 -> "XIV";
+            case 15 -> "XV";
+            case 16 -> "XVI";
+            case 17 -> "XVII";
+            case 18 -> "XVIII";
+            case 19 -> "XIX";
+            case 20 -> "XX";
+            default -> throw new Exception("Результат равен больше ста");
         };
         return romeNum;
     }
 
-    public int getResult(int letter1, int letter2, String s) throws Exception {
+    public int getResult(int num1, int num2, String s) throws Exception {
         int result = switch (s) {
-            case "/" -> letter1 / letter2;
-            case "+" -> letter1 + letter2;
-            case "-" -> letter1 - letter2;
-            case "*" -> letter1 * letter2;
+            case "/" -> num1 / num2;
+            case "+" -> num1 + num2;
+            case "-" -> num1 - num2;
+            case "*" -> num1 * num2;
             default -> throw new Exception("Неправильный оператор");
         };
         return result;
