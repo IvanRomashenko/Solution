@@ -52,7 +52,7 @@ class Calculation {
     }
 
     public int getNumber(String num) throws Exception {
-        int number = 0;
+        int number;
         try {
             number = Integer.parseInt(num);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ class Calculation {
     }
 
     public String getRomeNumber(int num) throws Exception {
-        String romeNum = switch (num) {
+        return switch (num) {
             case 1 -> "I";
             case 2 -> "II";
             case 3 -> "III";
@@ -97,17 +97,15 @@ class Calculation {
             case 20 -> "XX";
             default -> throw new Exception("Результат равен больше ста");
         };
-        return romeNum;
     }
 
     public int getResult(int num1, int num2, String s) throws Exception {
-        int result = switch (s) {
+        return switch (s) {
             case "/" -> num1 / num2;
             case "+" -> num1 + num2;
             case "-" -> num1 - num2;
             case "*" -> num1 * num2;
             default -> throw new Exception("Неправильный оператор");
         };
-        return result;
     }
 }
